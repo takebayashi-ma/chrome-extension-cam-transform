@@ -1,4 +1,4 @@
-function main() {
+const main = () => {
   'use strict';
   const outputCanvas = document.createElement('canvas');
   const workingCanvas = document.createElement('canvas');
@@ -15,7 +15,7 @@ function main() {
   video.height = 480;
 
   document.addEventListener('onLoadTransType', (e) => {
-    type=e.detail;
+    type = e.detail;
   });
 
   const outputCtx = outputCanvas.getContext('2d');
@@ -56,22 +56,17 @@ function main() {
   };
 
   const filterNegaPosi = (imageData) => {
-    // ネガポジ変換
     for (let i = 0; i < imageData.data.length; i=i+4) {
-      imageData.data[i] = 255 - imageData.data[i]; // R
-      imageData.data[i+1] = 255 - imageData.data[i+1]; // G
-      imageData.data[i+2] = 255 - imageData.data[i+2]; // B
-      imageData.data[i+3] = imageData.data[i+3]; // A
+      imageData.data[i] = 255 - imageData.data[i];
+      imageData.data[i+1] = 255 - imageData.data[i+1];
+      imageData.data[i+2] = 255 - imageData.data[i+2];
+      imageData.data[i+3] = imageData.data[i+3];
     }
   };
 
   const filterGamma = (imageData) => {
-    // ガンマ値=2.0
     const gamma = 3.0;
-    // 補正式
     const correctify = (val) => 255 * Math.pow(val / 255, 1 / gamma);
-
-    // ネガポジ変換
     for (let i = 0; i < imageData.data.length; i=i+4) {
       imageData.data[i] = correctify(imageData.data[i]);
       imageData.data[i+1] = correctify(imageData.data[i+1]);
@@ -87,7 +82,7 @@ function main() {
   if (navigator.mediaDevices._getUserMedia !== undefined) return;
   try {
     navigator.mediaDevices._getUserMedia = navigator.mediaDevices.getUserMedia;
-    navigator.mediaDevices.getUserMedia = function(constraints) {
+    navigator.mediaDevices.getUserMedia = (constraints) => {
       return new Promise((resolve, reject) => {
         navigator.mediaDevices._getUserMedia(constraints)
             .then((stream) => {
@@ -106,6 +101,6 @@ function main() {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
 main();

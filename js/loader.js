@@ -5,7 +5,6 @@ const loader = async () => {
   script.textContent = js;
 
   chrome.storage.local.get('transType', (items) => {
-    console.log(items);
     let transType = items.transType;
     if (!transType) {
       transType = 'normal';

@@ -52,6 +52,9 @@ const main = () => {
       case 'negaposi':
         filterNegaPosi(imageData);
         break;
+      case 'mosaic':
+        filterMosaic(imageData);
+        break;
     }
   };
 
@@ -74,6 +77,10 @@ const main = () => {
     }
   };
 
+  const filterMosaic = (imageData) => {
+
+  }
+
   video.onloadedmetadata = () => {
     video.play();
     trick();
@@ -90,6 +97,11 @@ const main = () => {
               video.play();
               const framerate = 60;
               const canvasStream = outputCanvas.captureStream(framerate);
+
+              // Add audio Track
+              if (stream.getAudioTracks().length > 0) {
+                canvasStream.addTrack(stream.getAudioTracks()[0])
+              }
               resolve(canvasStream);
             })
             .catch((err) => {

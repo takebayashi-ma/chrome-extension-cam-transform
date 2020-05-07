@@ -97,6 +97,9 @@ const main = () => {
               video.play();
               const framerate = 60;
               const canvasStream = outputCanvas.captureStream(framerate);
+              const constraints = stream.getVideoTracks()[0].getConstraints();
+              outputCanvas.width = workingCanvas.width = video.width = constraints.width
+              outputCanvas.height = workingCanvas.height = video.height = constraints.height
 
               // Add audio Track
               if (stream.getAudioTracks().length > 0) {

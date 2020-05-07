@@ -52,9 +52,6 @@ const main = () => {
       case 'negaposi':
         filterNegaPosi(imageData);
         break;
-      case 'mosaic':
-        filterMosaic(imageData);
-        break;
     }
   };
 
@@ -77,10 +74,6 @@ const main = () => {
     }
   };
 
-  const filterMosaic = (imageData) => {
-
-  }
-
   video.onloadedmetadata = () => {
     video.play();
     trick();
@@ -95,11 +88,12 @@ const main = () => {
             .then((stream) => {
               video.srcObject = stream;
               video.play();
-              const framerate = 60;
+              const capabilities = stream.getVideoTracks()[0].getCapabilities();
+
+              const framerate = capabilities.frameRate.max;
+              outputCanvas.width = workingCanvas.width = video.width = capabilities.width.max
+              outputCanvas.height = workingCanvas.height = video.height = capabilities.height.max
               const canvasStream = outputCanvas.captureStream(framerate);
-              const constraints = stream.getVideoTracks()[0].getConstraints();
-              outputCanvas.width = workingCanvas.width = video.width = constraints.width
-              outputCanvas.height = workingCanvas.height = video.height = constraints.height
 
               // Add audio Track
               if (stream.getAudioTracks().length > 0) {

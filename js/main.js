@@ -3,19 +3,11 @@ const main = () => {
   const outputCanvas = document.createElement('canvas');
   const workingCanvas = document.createElement('canvas');
   const video = document.createElement('video');
+
   let type;
 
-  outputCanvas.width = 640;
-  outputCanvas.height = 480;
-
-  workingCanvas.width = 640;
-  workingCanvas.height = 480;
-
-  video.width = 640;
-  video.height = 480;
-
-  document.addEventListener('onLoadTransType', (e) => {
-    type = e.detail;
+  document.addEventListener('onChangeTransType', (e) => {
+    type = e.detail.transType;
   });
 
   const outputCtx = outputCanvas.getContext('2d');
@@ -29,33 +21,50 @@ const main = () => {
         workingCanvas.height,
     );
 
-    const imageData = workingCtx.getImageData(
-        0,
-        0,
-        workingCanvas.width,
-        workingCanvas.height,
-    );
-    filter(imageData);
-
-    workingCtx.putImageData(imageData, 0, 0);
-
+    filter(workingCtx);
     outputCtx.drawImage(workingCanvas, 0, 0);
 
     window.requestAnimationFrame(trick);
   };
 
-  const filter = (imageData) => {
+  const filter = (workingCtx) => {
     switch (type) {
-      case 'gamma':
+      case 'gamma': {
+        const imageData = workingCtx.getImageData(
+            0,
+            0,
+            workingCanvas.width,
+            workingCanvas.height,
+        );
         filterGamma(imageData);
+        workingCtx.putImageData(imageData, 0, 0);
+        workingCtx.filter = 'none';
         break;
-      case 'negaposi':
-        filterNegaPosi(imageData);
+      }
+      case 'nega': {
+        const imageData = workingCtx.getImageData(
+            0,
+            0,
+            workingCanvas.width,
+            workingCanvas.height,
+        );
+        filterNega(imageData);
+        workingCtx.putImageData(imageData, 0, 0);
+        workingCtx.filter = 'none';
         break;
+      }
+      case 'mosaic': {
+        workingCtx.filter = 'blur(10px)';
+        break;
+      }
+      default: {
+        workingCtx.filter = 'none';
+      }
+
     }
   };
 
-  const filterNegaPosi = (imageData) => {
+  const filterNega = (imageData) => {
     for (let i = 0; i < imageData.data.length; i=i+4) {
       imageData.data[i] = 255 - imageData.data[i];
       imageData.data[i+1] = 255 - imageData.data[i+1];
@@ -75,6 +84,7 @@ const main = () => {
   };
 
   video.onloadedmetadata = () => {
+    video.muted = true;
     video.play();
     trick();
   };
@@ -88,11 +98,10 @@ const main = () => {
             .then((stream) => {
               video.srcObject = stream;
               video.play();
-              const capabilities = stream.getVideoTracks()[0].getCapabilities();
-
-              const framerate = capabilities.frameRate.max;
-              outputCanvas.width = workingCanvas.width = video.width = capabilities.width.max
-              outputCanvas.height = workingCanvas.height = video.height = capabilities.height.max
+              const settings = stream.getVideoTracks()[0].getSettings();
+              const framerate = settings.frameRate.max;
+              outputCanvas.width = workingCanvas.width = video.width = settings.width
+              outputCanvas.height = workingCanvas.height = video.height = settings.height
               const canvasStream = outputCanvas.captureStream(framerate);
 
               // Add audio Track

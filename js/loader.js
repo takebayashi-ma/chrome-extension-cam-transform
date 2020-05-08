@@ -4,18 +4,37 @@ const loader = async () => {
   const script = document.createElement('script');
   script.textContent = js;
 
-  chrome.storage.local.get('transType', (items) => {
-    let transType = items.transType;
-    if (!transType) {
-      transType = 'normal';
-    }
-    const evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent('onLoadTransType', true, true, transType);
-    document.dispatchEvent(evt);
-  });
+  try {
+    chrome.storage.local.get('transType', (items) => {
+      let transType = items.transType;
+      if (!transType) {
+        transType = 'normal';
+      }
+
+      const evt = new CustomEvent('onChangeTransType', {detail: {transType: transType}});
+      document.dispatchEvent(evt);
+    });
+    updateTransType();
+
+  } catch (e) {}
 
   document.body.insertBefore(script, document.body.firstChild);
 };
+
+const updateTransType = () => {
+  try {
+    chrome.storage.local.get('transType', (items) => {
+      let transType = items.transType;
+      if (!transType) {
+        transType = 'normal';
+      }
+      const evt = new CustomEvent('onChangeTransType', {detail: {transType: transType}});
+      document.dispatchEvent(evt);
+      setTimeout(updateTransType, 1000);
+    });
+  } catch (e) {}
+};
+
 window.addEventListener('load', () => {
   loader();
 }, false);

@@ -7,14 +7,20 @@
     width: 200px;
     height: 100px;
   }
+
+  ul {
+    list-style: none;
+    font-size:  18px;
+  }
   </style>
 </head>
 <body>
   <form>
     <ul>
-      <li><input type="radio" name="transType" value="normal"><label for="">ノーマル</label></li>
-      <li><input type="radio" name="transType" value="negaposi"><label for="">ネガポジ</label></li>
-      <li><input type="radio" name="transType" value="gamma"><label for="">ガンマ</label></li>
+      <li><label><input type="radio" name="transType" value="normal">ノーマル</label></li>
+      <li><label><input type="radio" name="transType" value="nega">反転</label></li>
+      <li><label><input type="radio" name="transType" value="gamma">美白</label></li>
+      <li><label><input type="radio" name="transType" value="mosaic">モザイク</label></li>
     </ul>
   </form>
   <script src="/js/popup.js"></script>

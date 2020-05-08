@@ -32,8 +32,11 @@ const saveTransType = () => {
   if (!document.querySelector('input:checked[name=transType]')) {
     return;
   }
-  defaultStore['transType'] = document.querySelector(
+
+  const transType = document.querySelector(
       'input:checked[name=transType]',
   ).value;
+
+  defaultStore['transType'] = transType
   chrome.storage.local.set(defaultStore);
 };

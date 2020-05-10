@@ -4,25 +4,62 @@
   <meta charset="UTF-8">
   <style>
   body{
-    width: 200px;
-    height: 100px;
+    width: 180px;
+    height: 200px;
   }
 
   ul {
     list-style: none;
-    font-size:  18px;
+    font-size:  13px;
+    margin: 5px;
+  }
+
+  .hide {
+    display: none;
+  }
+  .show {
+
+  }
+
+  .config-title {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .config-level {
+    font-size: 15px;
+    padding: 10px;
+  }
+  .box {
+   width: 160px;
+   height: 190px;
+   border: 1px solid #000;
+   margin: 5px;
+  }
+
+  .range {
+    text-align: center;
   }
   </style>
 </head>
 <body>
-  <form>
+  <div class="box">
+    <span class="config-title">エフェクト</span>
     <ul>
       <li><label><input type="radio" name="transType" value="normal">ノーマル</label></li>
-      <li><label><input type="radio" name="transType" value="nega">反転</label></li>
+      <li><label><input type="radio" name="transType" value="nega">色反転</label></li>
       <li><label><input type="radio" name="transType" value="gamma">美白</label></li>
       <li><label><input type="radio" name="transType" value="mosaic">モザイク</label></li>
     </ul>
-  </form>
+
+    <div id="box-trans-level">
+      <span class="config-level">レベル</span>
+      <div class="range">
+        <input type="range" id="transLevel" name="level" min="0" max="10" step="0.1">
+      </div>
+    </div>
+  </div>
+
   <script src="/js/popup.js"></script>
 </body>
 </html>

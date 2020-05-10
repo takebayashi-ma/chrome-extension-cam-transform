@@ -10,28 +10,40 @@ const loader = async () => {
       if (!transType) {
         transType = 'normal';
       }
-
-      const evt = new CustomEvent('onChangeTransType', {detail: {transType: transType}});
-      document.dispatchEvent(evt);
+      updateTransType(transType)
     });
-    updateTransType();
 
+    chrome.storage.local.get('transLevel', (items) => {
+      let transLevel = items.transLevel;
+      if (!transLevel) {
+        transLevel = '0';
+      }
+      updateTransLevel(transLevel)
+    });
+    chrome.storage.local.onChanged.addListener((changes) => {
+      if (changes.transLevel) {
+        updateTransLevel(changes.transLevel.newValue)
+      }
+      if (changes.transType) {
+        updateTransType(changes.transType.newValue)
+      }
+    });
   } catch (e) {}
 
   document.body.insertBefore(script, document.body.firstChild);
 };
 
-const updateTransType = () => {
+const updateTransType = (transType) => {
   try {
-    chrome.storage.local.get('transType', (items) => {
-      let transType = items.transType;
-      if (!transType) {
-        transType = 'normal';
-      }
-      const evt = new CustomEvent('onChangeTransType', {detail: {transType: transType}});
-      document.dispatchEvent(evt);
-      setTimeout(updateTransType, 1000);
-    });
+    const evt = new CustomEvent('onChangeTransType', {detail: {transType: transType}});
+    document.dispatchEvent(evt);
+  } catch (e) {}
+};
+
+const updateTransLevel = (transLevel) => {
+  try {
+    const evt = new CustomEvent('onChangeTransLevel', {detail: {transLevel: transLevel}});
+    document.dispatchEvent(evt);
   } catch (e) {}
 };
 

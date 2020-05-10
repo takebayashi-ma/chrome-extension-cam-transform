@@ -1,8 +1,8 @@
 
 {
   "manifest_version": 2,
-  "name": "カメラ加工",
-  "description": "カメラ映像を加工します",
+  "name": "Cam Effect",
+  "description": "Webカメラにエフェクトを追加します。",
   "version": "0.1",
   "icons":  {
     "16": "icons/icon16.png",
